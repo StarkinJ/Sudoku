@@ -129,12 +129,26 @@
     
     <script>
         document.querySelectorAll(".sudokuQuadrants input").forEach(input => {
-        input.setAttribute("maxlength", "1");
-        input.setAttribute("inputmode", "numeric");
-        input.addEventListener("input", (e) => {
-            e.target.value = e.target.value.replace(/[^1-9]/g, ""); // Allow only digits 1-9
-        });    
-    });
+            input.classList.add("sudoku-input"); // Use classList.add instead of setAttribute
+            input.setAttribute("maxlength", "1");
+            input.setAttribute("inputmode", "numeric");
+            input.setAttribute("autocomplete", "off");
+            input.addEventListener("keydown", (e) => {
+                if (/[1-9]/.test(e.key)) {
+                    e.preventDefault(); // Prevent adding another digit
+                    e.target.value = e.key; // Replace the current value with the new one
+                } else if (e.key !== "Backspace") {
+                    e.preventDefault(); // Prevent invalid input
+                }
+             });
+        });
+        document.querySelectorAll(".sudokuQuadrants input").forEach(input => {
+            input.addEventListener("input", () => {
+                updateSudokuRow();
+                rowValid();
+            });
+        });
     </script>
+    <script src="index.js"></script>
 </body>
 </html>
